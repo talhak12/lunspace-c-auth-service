@@ -5,7 +5,7 @@ import createHttpError, { HttpError } from 'http-errors';
 const app = express();
 
 app.get('/', (req, res, next) => {
-  res.send('cc');
+  res.status(201).send('pop');
 });
 
 //global error handler

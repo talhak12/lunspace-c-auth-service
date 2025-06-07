@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.ts",
-    "test": "jest --watch --runInBand"
+    "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
+    "test": "jest --watch --runInBand",
+    "start": "ts-node src/index.ts",
+    "typeorm": "typeorm-ts-node-commonjs"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +17,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^22.15.29",
     "@types/winston": "^2.4.4",
+    "cross-env": "^7.0.3",
     "jest": "^29.7.0",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.1",
@@ -27,6 +30,9 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "http-errors": "^2.0.0",
+    "pg": "^8.14.1",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "0.3.24",
     "winston": "^3.17.0"
   }
 }

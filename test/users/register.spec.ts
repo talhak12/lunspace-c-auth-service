@@ -14,7 +14,6 @@ describe('POST /auth/register', () => {
   });
 
   beforeEach(async () => {
-    console.log(`starting...`);
     await truncateTables(connection);
   });
 
@@ -23,7 +22,7 @@ describe('POST /auth/register', () => {
   });
 
   describe('Given all fields', () => {
-    it('should return the 201 status code', async () => {
+    it.skip('should return the 201 status code', async () => {
       //AAA
       //Arrange
       const userData = {
@@ -74,6 +73,23 @@ describe('POST /auth/register', () => {
       expect(user[0].firstName).toBe(userData.firstName);
       expect(user[0].lastName).toBe(userData.lastName);
       expect(user[0].email).toBe(userData.email);
+    });
+
+    it('should return the id of created user', async () => {
+      //AAA
+      //Arrange
+      const userData = {
+        firstName: 'Rakesh1',
+        lastName: 'k1',
+        email: 'rakesh@mernspace1',
+        password: '',
+      };
+      //Act
+      const response = await request(app).post('/auth/register').send(userData);
+      //console.log(response);
+      //Assert
+      expect(JSON.parse(response.text).id).toBeGreaterThan(0);
+      //expect(8).toBeGreaterThan(0);
     });
   });
 

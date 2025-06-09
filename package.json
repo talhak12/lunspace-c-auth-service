@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
-    "test": "jest --watch --runInBand",
+    "test": "jest --watch --runInBand --detectOpenHandles",
     "start": "ts-node src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs"
   },

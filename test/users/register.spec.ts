@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../../src/app';
 import { DataSource } from 'typeorm';
 import { AppDataSource } from '../../src/config/data-source';
-import { truncateTables } from './utils/index';
+
 import { User } from '../../src/entity/User';
 
 describe('POST /auth/register', () => {
@@ -14,7 +14,10 @@ describe('POST /auth/register', () => {
   });
 
   beforeEach(async () => {
-    await truncateTables(connection);
+    await connection.dropDatabase();
+    await connection.synchronize();
+
+    //await truncateTables(connection);
   });
 
   afterAll(async () => {
@@ -90,6 +93,22 @@ describe('POST /auth/register', () => {
       //Assert
       expect(JSON.parse(response.text).id).toBeGreaterThan(0);
       //expect(8).toBeGreaterThan(0);
+    });
+
+    it('should assign a customer role', async () => {
+      const userData = {
+        firstName: 'Rakesh1',
+        lastName: 'k1',
+        email: 'rakesh@mernspace1',
+        password: '',
+      };
+      //Act
+      await request(app).post('/auth/register').send(userData);
+
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users[0]).toHaveProperty('role');
+      expect(users[0].role).toBe('customer');
     });
   });
 

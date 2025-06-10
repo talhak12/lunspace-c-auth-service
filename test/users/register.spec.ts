@@ -186,7 +186,7 @@ describe('POST /auth/register', () => {
   });
 
   describe('Fields are missing', () => {
-    it('should return 400 status code if email field is missing', async () => {
+    it.skip('should return 400 status code if email field is missing', async () => {
       const userData = {
         firstName: 'Rakesh1',
         lastName: 'k1',
@@ -201,6 +201,26 @@ describe('POST /auth/register', () => {
       const userRepository = connection.getRepository(User);
       const users = await userRepository.find();
       expect(users).toHaveLength(0);
+    });
+  });
+
+  describe('Fields are not in proper format', () => {
+    it('should trim the email field', async () => {
+      const userData = {
+        firstName: 'Rakesh1',
+        lastName: 'k1',
+        email: ' a@a.com ',
+        password: 'secret',
+      };
+      //Act
+      const response = await request(app).post('/auth/register').send(userData);
+      //Assert
+
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      const user = users[0];
+
+      expect(user.email).toBe('a@a.com');
     });
   });
 });

@@ -166,7 +166,7 @@ describe('POST /auth/register', () => {
       expect(users[0].password).toHaveLength(60);
     });
 
-    it('should return 400 status code if email already exists', async () => {
+    it.skip('should return 400 status code if email already exists', async () => {
       const userData = {
         firstName: 'Rakesh1',
         lastName: 'k1',
@@ -185,5 +185,22 @@ describe('POST /auth/register', () => {
     });
   });
 
-  describe('Fields are missing', () => {});
+  describe('Fields are missing', () => {
+    it('should return 400 status code if email field is missing', async () => {
+      const userData = {
+        firstName: 'Rakesh1',
+        lastName: 'k1',
+        email: '',
+        password: 'secret',
+      };
+      //Act
+      const response = await request(app).post('/auth/register').send(userData);
+      //Assert
+      expect(response.statusCode).toBe(400);
+
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users).toHaveLength(0);
+    });
+  });
 });

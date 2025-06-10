@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.2",
     "@types/http-errors": "^2.0.4",
     "@types/jest": "^29.5.14",
@@ -27,6 +28,7 @@
   },
   "dependencies": {
     "@types/supertest": "^6.0.3",
+    "bcrypt": "^6.0.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "http-errors": "^2.0.0",

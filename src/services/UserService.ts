@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm';
 import { AppDataSource } from '../config/data-source';
+import bcrypt from 'bcrypt';
 import { User } from '../entity/User';
 import { userData } from '../types';
 import createHttpError from 'http-errors';
@@ -9,17 +10,24 @@ export class UserService {
   constructor(private userRepository: Repository<User>) {}
 
   async create({ firstName, lastName, email, password }: userData) {
-    //const userRepository = AppDataSource.getRepository(User);
+    const user = await this.userRepository.findOne({ where: { email: email } });
+    if (user) {
+      const err = createHttpError(400, 'Email already exists');
+      throw err;
+    }
+    const hashPassword = await bcrypt.hash(password, 10);
+
     try {
       const userRecord = await this.userRepository.save({
         firstName,
         lastName,
         email,
-        password,
+        password: hashPassword,
         role: Roles.CUSTOMER,
       });
       return userRecord.id;
     } catch (err) {
+      //console.log(err);
       const error = createHttpError(
         500,
         'failed to store the data in the database'

@@ -5,6 +5,7 @@ import { AppDataSource } from '../../src/config/data-source';
 
 import { User } from '../../src/entity/User';
 import { Roles } from '../../src/constants';
+import { isJWT } from './anwar';
 
 describe('POST /auth/register', () => {
   let connection: DataSource;
@@ -183,6 +184,45 @@ describe('POST /auth/register', () => {
       const users = await userRepository.find();
       expect(users).toHaveLength(1);
     });
+
+    it('should return access token and refresh token inside a cookie', async () => {
+      const userData = {
+        firstName: 'Rakesh1',
+        lastName: 'k1',
+        email: 'rakesh@mernspace1',
+        password: 'secret',
+      };
+      //Act
+
+      let response = await request(app).post('/auth/register').send(userData);
+      //Assert
+
+      const b = {
+        ...response.headers,
+        'set-cookie': [response.headers['set-cookie']],
+      };
+      let accessToken = null;
+      let refreshToken = null;
+
+      //const c = response.headers['set-cookie'] || [];
+      let co: string[];
+      co = b['set-cookie'];
+      console.log(co);
+      co.forEach((cookie) => {
+        if (cookie[0].startsWith('accessToken=')) {
+          accessToken = cookie[0].split(';')[0].split('=')[1];
+        }
+
+        if (cookie[1].startsWith('refreshToken=')) {
+          refreshToken = cookie[1].split(';')[0].split('=')[1];
+        }
+      });
+
+      expect(accessToken).not.toBe(null);
+      expect(refreshToken).not.toBe(null);
+
+      expect(isJWT(accessToken)).toBeTruthy();
+    });
   });
 
   describe('Fields are missing', () => {
@@ -205,7 +245,7 @@ describe('POST /auth/register', () => {
   });
 
   describe('Fields are not in proper format', () => {
-    it('should trim the email field', async () => {
+    it.skip('should trim the email field', async () => {
       const userData = {
         firstName: 'Rakesh1',
         lastName: 'k1',

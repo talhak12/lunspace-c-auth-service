@@ -43,39 +43,15 @@ export class AuthController {
         password,
       });
 
-      /*let privateKey: Buffer;
-
-      privateKey = fs.readFileSync(
-        path.join(__dirname, '../../certs/private.pem')
-      );*/
-
       const payload: JwtPayload = {
         sub: String(user.id),
         role: 'customer',
       };
 
-      /*const accessToken = sign(payload, privateKey, {
-        algorithm: 'RS256',
-        expiresIn: '1h',
-        issuer: 'auth-service',
-      });*/
-
       const accessToken = this.tokenService.generateAccessToken(payload);
 
-      const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365;
+      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
 
-      const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
-      const newRefreshToken = await refreshTokenRepository.save({
-        user: user,
-        expiresAt: new Date(Date.now() + MS_IN_YEAR),
-      });
-
-      /*const refreshToken = sign(payload, Config.REFRESH_TOKEN_SECRET!, {
-        algorithm: 'HS256',
-        expiresIn: '1y',
-        issuer: 'auth-service',
-        jwtid: String(newRefreshToken.id),
-      });*/
       const refreshToken = this.tokenService.generateRefreshToken({
         ...payload,
         id: String(newRefreshToken.id),

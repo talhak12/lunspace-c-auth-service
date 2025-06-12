@@ -25,7 +25,7 @@ export class UserService {
         password: hashPassword,
         role: Roles.CUSTOMER,
       });
-      return userRecord.id;
+      return userRecord;
     } catch (err) {
       //console.log(err);
       const error = createHttpError(

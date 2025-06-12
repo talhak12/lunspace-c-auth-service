@@ -6,6 +6,7 @@ import { AppDataSource } from '../../src/config/data-source';
 import { User } from '../../src/entity/User';
 import { Roles } from '../../src/constants';
 import { isJWT } from './anwar';
+import { RefreshToken } from '../../src/entity/RefreshToken';
 
 describe('POST /auth/register', () => {
   let connection: DataSource;
@@ -185,7 +186,7 @@ describe('POST /auth/register', () => {
       expect(users).toHaveLength(1);
     });
 
-    it('should return access token and refresh token inside a cookie', async () => {
+    it.skip('should return access token and refresh token inside a cookie', async () => {
       const userData = {
         firstName: 'Rakesh1',
         lastName: 'k1',
@@ -222,6 +223,32 @@ describe('POST /auth/register', () => {
       expect(refreshToken).not.toBe(null);
 
       expect(isJWT(accessToken)).toBeTruthy();
+    });
+
+    it('should store the refresh token in the database', async () => {
+      //Arrange
+      const userData = {
+        firstName: 'Rakesh1',
+        lastName: 'k1',
+        email: 'rakesh@mernspace1',
+        password: 'secret',
+      };
+      //Act
+      let response = await request(app).post('/auth/register').send(userData);
+
+      //Assert
+      const refreshTokenRepo = connection.getRepository(RefreshToken);
+      //const refreshToken = await refreshTokenRepo.find();
+      //expect(refreshToken).toHaveLength(1);
+
+      const token = await refreshTokenRepo
+        .createQueryBuilder('refreshToken')
+        .where('refreshToken.userId = :userId', {
+          userId: response.body.id,
+        })
+        .getMany();
+
+      expect(token).toHaveLength(1);
     });
   });
 

@@ -1,11 +1,13 @@
 import 'reflect-metadata';
 
 import express, { Request, Response, NextFunction } from 'express';
+import cookieParser from 'cookie-parser';
 import logger from './config/logger';
 import authRouter from './routes/auth';
 import createHttpError, { HttpError } from 'http-errors';
 
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 
 app.get('/', (req, res, next) => {

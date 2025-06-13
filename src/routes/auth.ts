@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { AuthController } from '../controllers/AuthController';
 import { UserService } from '../services/UserService';
 import { AppDataSource } from '../config/data-source';
@@ -9,6 +9,8 @@ import { TokenService } from '../services/TokenService';
 import { RefreshToken } from '../entity/RefreshToken';
 import loginValidator from '../validators/login-validator';
 import { CredentialService } from '../services/CredentialService';
+import authenticate from '../middlwares/authenticate';
+import { AuthRequest } from '../types';
 
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
@@ -30,6 +32,10 @@ router.post('/register', registerValidator, (req, res, next) => {
 
 router.post('/login', loginValidator, (req, res, next) => {
   authController.login(req, res, next);
+});
+
+router.get('/self', authenticate, (req, res) => {
+  authController.self(req as AuthRequest, res);
 });
 
 export default router;

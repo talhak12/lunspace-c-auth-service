@@ -74,5 +74,19 @@ describe('GET /auth/self', () => {
         'password'
       );
     });
+
+    it('should return 401 status code if token does not ', async () => {
+      //Register
+      const userData = {
+        firstName: 'Rakesh',
+        lastName: 'k',
+        email: 'rakesh@mernspace',
+        password: 'password',
+      };
+
+      const response = await request(app).get('/auth/self').send();
+
+      expect(response.statusCode).toBe(401);
+    });
   });
 });

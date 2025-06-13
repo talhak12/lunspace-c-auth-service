@@ -35,6 +35,7 @@ router.post('/login', loginValidator, (req, res, next) => {
 });
 
 router.get('/self', authenticate, (req, res) => {
+  //res.json({});
   authController.self(req as AuthRequest, res);
 });
 

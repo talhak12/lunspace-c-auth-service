@@ -9,7 +9,7 @@ import path from 'path';
 
 const app = express();
 
-//app.use(express.static('public'));
+app.use(express.static('public'));
 
 app.use(cookieParser());
 app.use(express.json());
@@ -22,7 +22,8 @@ app.use('/auth', authRouter);
 
 //global error handler
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
-  logger.error(err.message);
+  console.log(err);
+  //logger.error(err.message);
   const statusCode = err.statusCode || err.status || 500;
 
   res.status(statusCode).json({

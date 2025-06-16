@@ -2,8 +2,10 @@ import 'reflect-metadata';
 
 import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
-import logger from './config/logger';
+
 import authRouter from './routes/auth';
+import tenantRouter from './routes/tenant';
+
 import createHttpError, { HttpError } from 'http-errors';
 import path from 'path';
 
@@ -19,6 +21,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.use('/auth', authRouter);
+app.use('/tenants', tenantRouter);
 
 //global error handler
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {

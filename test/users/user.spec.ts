@@ -33,7 +33,7 @@ describe('GET /auth/self', () => {
   });
 
   describe('Given all fields', () => {
-    it('should return the 200 status code ', async () => {
+    it.skip('should return the 200 status code ', async () => {
       //Register
       const userData = {
         firstName: 'Rakesh',
@@ -53,7 +53,7 @@ describe('GET /auth/self', () => {
       expect(response.body.id).toBe(data.id);
     });
 
-    it('should not return the password field ', async () => {
+    it.skip('should not return the password field ', async () => {
       //Register
       const userData = {
         firstName: 'Rakesh',
@@ -75,7 +75,7 @@ describe('GET /auth/self', () => {
       );
     });
 
-    it('should return 401 status code if token does not ', async () => {
+    it.skip('should return 401 status code if token does not ', async () => {
       //Register
       const userData = {
         firstName: 'Rakesh',

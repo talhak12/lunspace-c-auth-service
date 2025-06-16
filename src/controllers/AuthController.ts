@@ -134,19 +134,16 @@ export class AuthController {
         id: String(newRefreshToken.id),
       });
 
-      res.cookie('accessToken', accessToken, {
-        domain: 'localhost',
-        sameSite: 'strict',
-        maxAge: 1000 * 60 * 60,
-        httpOnly: true,
-      });
+      res = this.bhund(res, accessToken);
+      console.log('bhund', res.cookie);
+      res = this.bhund(res, refreshToken);
 
-      res.cookie('refreshToken', refreshToken, {
+      /*res.cookie('refreshToken', refreshToken, {
         domain: 'localhost',
         sameSite: 'strict',
         maxAge: 1000 * 60 * 60 * 24 * 365,
         httpOnly: true,
-      });
+      });*/
 
       this.logger.info('User has been logged in', { id: user.id });
 
@@ -209,5 +206,30 @@ export class AuthController {
 
       res.json({ id: user.id });
     } catch (err) {}
+  }
+
+  async logout(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      console.log(req.auth);
+
+      await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+
+      res.clearCookie('accessToken');
+      res.clearCookie('refreshToken');
+      res.json({});
+    } catch (err) {
+      next(err);
+      return;
+    }
+  }
+
+  bhund(res: Response, token: string) {
+    res.cookie('accessToken', token, {
+      domain: 'localhost',
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60,
+      httpOnly: true,
+    });
+    return res;
   }
 }

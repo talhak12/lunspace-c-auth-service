@@ -9,6 +9,7 @@ import { Roles } from '../../src/constants';
 describe('GET /auth/self', () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
+  let adminToken: string;
 
   beforeAll(async () => {
     //jest.setTimeout(70000);
@@ -20,6 +21,11 @@ describe('GET /auth/self', () => {
     jwks.start();
     await connection.dropDatabase();
     await connection.synchronize();
+
+    adminToken = jwks.token({
+      sub: '1',
+      role: Roles.ADMIN,
+    });
 
     //await truncateTables(connection);
   });

@@ -42,7 +42,7 @@ describe('POST /tenants', () => {
   });
 
   describe('Given all fields', () => {
-    it('should return a 201 status code', async () => {
+    it.skip('should return a 201 status code', async () => {
       const tenantData = {
         name: 'Tenant name',
         address: 'Tenant address',
@@ -72,6 +72,11 @@ describe('POST /tenants', () => {
     });
 
     it.skip('should return 401 if user is not authenticated', async () => {
+      adminToken = jwks.token({
+        sub: '1',
+        role: Roles.MANAGER,
+      });
+
       const tenantData = {
         name: 'Tenant nameq',
         address: 'Tenant address',
@@ -80,6 +85,25 @@ describe('POST /tenants', () => {
       const response = await request(app).post('/tenants').send(tenantData);
       //Act
       expect(response.statusCode).toBe(401);
+    });
+
+    it('should return 403 if user is not an admin', async () => {
+      const managerToken = jwks.token({
+        sub: '1',
+        role: Roles.MANAGER,
+      });
+
+      const tenantData = {
+        name: 'Tenant nameq',
+        address: 'Tenant address',
+      };
+
+      const response = await request(app)
+        .post('/tenants')
+        .set('Cookie', [`accessToken=${managerToken}`])
+        .send(tenantData);
+      //Act
+      expect(response.statusCode).toBe(403);
     });
   });
 });

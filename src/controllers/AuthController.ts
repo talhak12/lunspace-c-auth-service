@@ -9,6 +9,7 @@ import { JwtPayload, sign } from 'jsonwebtoken';
 import { TokenService } from '../services/TokenService';
 import createHttpError from 'http-errors';
 import { CredentialService } from '../services/CredentialService';
+import { Roles } from '../constants';
 const { validationResult } = require('express-validator');
 
 export class AuthController {
@@ -41,6 +42,7 @@ export class AuthController {
         lastName,
         email,
         password,
+        role: Roles.CUSTOMER,
       });
 
       const payload: JwtPayload = {

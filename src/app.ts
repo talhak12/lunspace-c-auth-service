@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 
 import authRouter from './routes/auth';
 import tenantRouter from './routes/tenant';
+import userRouter from './routes/user';
 
 import createHttpError, { HttpError } from 'http-errors';
 import path from 'path';
@@ -22,6 +23,7 @@ app.get('/', (req, res, next) => {
 
 app.use('/auth', authRouter);
 app.use('/tenants', tenantRouter);
+app.use('/users', userRouter);
 
 //global error handler
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {

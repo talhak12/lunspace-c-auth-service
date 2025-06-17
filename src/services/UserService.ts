@@ -9,7 +9,7 @@ import { Roles } from '../constants';
 export class UserService {
   constructor(private userRepository: Repository<User>) {}
 
-  async create({ firstName, lastName, email, password }: userData) {
+  async create({ firstName, lastName, email, password, role }: userData) {
     const user = await this.userRepository.findOne({ where: { email: email } });
     if (user) {
       const err = createHttpError(400, 'Email already exists');
@@ -23,7 +23,7 @@ export class UserService {
         lastName,
         email,
         password: hashPassword,
-        role: Roles.CUSTOMER,
+        role,
       });
       return userRecord;
     } catch (err) {

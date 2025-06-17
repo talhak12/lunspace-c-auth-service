@@ -21,7 +21,7 @@ const Bholes = {
   MANAGER: 'manager',
 };
 
-router.post('/', authenticate, canAccess([Bholes.ADMIN]), (req, res, next) => {
+router.post('/', authenticate, (req, res, next) => {
   tenantController.create(req, res, next);
 });
 

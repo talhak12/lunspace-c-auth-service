@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
+    "build": "tsc",
     "test": "jest --watch --runInBand --detectOpenHandles",
     "start": "ts-node src/index.ts",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate",

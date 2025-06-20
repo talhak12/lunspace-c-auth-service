@@ -11,6 +11,7 @@ export class UserService {
 
   async create({ firstName, lastName, email, password, role }: userData) {
     const user = await this.userRepository.findOne({ where: { email: email } });
+
     if (user) {
       const err = createHttpError(400, 'Email already exists');
       throw err;

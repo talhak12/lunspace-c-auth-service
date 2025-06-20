@@ -3,14 +3,24 @@ import 'reflect-metadata';
 import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 
+import cors from 'cors';
+
 import authRouter from './routes/auth';
 import tenantRouter from './routes/tenant';
 import userRouter from './routes/user';
 
 import createHttpError, { HttpError } from 'http-errors';
 import path from 'path';
+import { Config } from './config';
 
 const app = express();
+//Config.URL
+app.use(
+  cors({
+    origin: ['http://localhost:5174'],
+    credentials: true,
+  })
+);
 
 app.use(express.static('public'));
 

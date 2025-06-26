@@ -129,6 +129,13 @@ export class AuthController {
 
       const accessToken = this.tokenService.generateAccessToken(payload);
 
+      res.cookie('accessToken', accessToken, {
+        domain: 'localhost',
+        sameSite: 'strict',
+        maxAge: 1000 * 60 * 60,
+        httpOnly: true,
+      });
+
       const newRefreshToken = await this.tokenService.persistRefreshToken(user);
 
       const refreshToken = this.tokenService.generateRefreshToken({
@@ -136,16 +143,16 @@ export class AuthController {
         id: String(newRefreshToken.id),
       });
 
-      res = this.bhund(res, accessToken);
-      console.log('bhund', res.cookie);
-      res = this.bhund(res, refreshToken);
+      //res = this.bhund(res, accessToken);
+      //console.log('bhund', res.cookie);
+      //res = this.bhund(res, refreshToken);
 
-      /*res.cookie('refreshToken', refreshToken, {
+      res.cookie('refreshToken', refreshToken, {
         domain: 'localhost',
         sameSite: 'strict',
         maxAge: 1000 * 60 * 60 * 24 * 365,
         httpOnly: true,
-      });*/
+      });
 
       this.logger.info('User has been logged in', { id: user.id });
 

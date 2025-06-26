@@ -18,4 +18,22 @@ export class TenantController {
       next(err);
     }
   }
+
+  async get(req: CreateTenantRequest, res: Response, next: NextFunction) {
+    try {
+      const tenant = await this.tenantService.get();
+
+      //console.log(JSON.stringify(tenant[0]));
+
+      const g = JSON.stringify(tenant);
+      const k = [];
+      this.logger.info('Tenant has been created');
+
+      k.push(JSON.parse(g));
+
+      res.status(201).json(JSON.parse(g));
+    } catch (err) {
+      next(err);
+    }
+  }
 }

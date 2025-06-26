@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { UserService } from '../services/UserService';
 import { CreateUserRequest } from '../types';
 import { Roles } from '../constants';
@@ -21,5 +21,11 @@ export class UserController {
     } catch (err) {
       next(err);
     }
+  }
+
+  async get(req: Request, res: Response) {
+    const user = await this.userService.find();
+
+    res.json({ user });
   }
 }

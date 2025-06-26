@@ -50,6 +50,20 @@ export class UserService {
       where: {
         id,
       },
+      relations: {
+        tenant: true,
+      },
+    });
+  }
+
+  async find() {
+    return await this.userRepository.find({
+      select: {
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true,
+      },
     });
   }
 }

@@ -35,4 +35,8 @@ router.post('/', authenticate, k('admin'), (req, res, next) => {
   userController.create(req, res, next);
 });
 
+router.get('/', (req, res, next) => {
+  userController.get(req, res);
+});
+
 export default router;

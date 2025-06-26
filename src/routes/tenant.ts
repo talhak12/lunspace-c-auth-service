@@ -25,4 +25,8 @@ router.post('/', authenticate, (req, res, next) => {
   tenantController.create(req, res, next);
 });
 
+router.get('/', (req, res, next) => {
+  tenantController.get(req, res, next);
+});
+
 export default router;

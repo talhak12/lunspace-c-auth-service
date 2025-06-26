@@ -41,3 +41,13 @@ export interface CreateTenantRequest extends Request {
 export interface CreateUserRequest extends Request {
   body: userData;
 }
+
+export type AuthCookie = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export interface UserQueryParams {
+  currentPage: number;
+  perPage: number;
+}

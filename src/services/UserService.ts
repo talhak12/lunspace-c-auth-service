@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { AppDataSource } from '../config/data-source';
 import bcrypt from 'bcrypt';
 import { User } from '../entity/User';
-import { userData } from '../types';
+import { userData, UserQueryParams } from '../types';
 import createHttpError from 'http-errors';
 import { Roles } from '../constants';
 
@@ -56,14 +56,23 @@ export class UserService {
     });
   }
 
-  async find() {
-    return await this.userRepository.find({
+  async find(validatedQuery: UserQueryParams) {
+    const queryBuilder = this.userRepository.createQueryBuilder();
+
+    const result = await queryBuilder
+      .skip((validatedQuery.currentPage - 1) * validatedQuery.perPage)
+      .take(validatedQuery.perPage)
+      .getManyAndCount();
+
+    return result;
+
+    /*return await this.userRepository.find({
       select: {
         firstName: true,
         lastName: true,
         email: true,
         role: true,
       },
-    });
+    });*/
   }
 }

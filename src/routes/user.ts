@@ -9,6 +9,8 @@ import { canAccess } from '../middlwares/canAccess';
 import { UserController } from '../controllers/UserController';
 import { UserService } from '../services/UserService';
 import { User } from '../entity/User';
+import listUserValidator from '../validators/list-user-validator';
+import { InternalRequest } from 'express-validator/lib/base';
 
 const router = express.Router();
 
@@ -31,11 +33,15 @@ export const k = (p: string) => {
   };
 };
 
-router.post('/', authenticate, k('admin'), (req, res, next) => {
+/*router.post('/', authenticate, k('admin'), (req, res, next) => {
+  userController.create(req, res, next);
+});*/
+
+router.post('/', authenticate, (req, res, next) => {
   userController.create(req, res, next);
 });
 
-router.get('/', (req, res, next) => {
+router.get('/', listUserValidator, (req, res, next) => {
   userController.get(req, res);
 });
 

@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { AppDataSource } from '../config/data-source';
 import bcrypt from 'bcrypt';
 import { User } from '../entity/User';
@@ -57,12 +57,39 @@ export class UserService {
   }
 
   async find(validatedQuery: UserQueryParams) {
-    const queryBuilder = this.userRepository.createQueryBuilder();
+    const queryBuilder = this.userRepository.createQueryBuilder('user');
+
+    if (validatedQuery.q) {
+      const searchTerm = `%${validatedQuery.q}%`;
+
+      console.log('searchTerm', searchTerm);
+
+      /*queryBuilder.where(
+        'concat(user.firstName,user.lastName) LIKE :searchTerm',
+        { searchTerm }
+      );*/
+
+      queryBuilder.where(
+        new Brackets((qb) => {
+          qb.where(
+            "CONCAT(user.firstName, ' ', user.lastName) LIKE :searchTerm",
+            { q: searchTerm }
+          ).orWhere('user.email LIKE :searchTerm', { searchTerm });
+        })
+      );
+    }
+
+    if (validatedQuery.role) {
+      queryBuilder.andWhere('user.role = :role', { role: validatedQuery.role });
+    }
 
     const result = await queryBuilder
       .skip((validatedQuery.currentPage - 1) * validatedQuery.perPage)
       .take(validatedQuery.perPage)
+      .orderBy('user.id', 'DESC')
       .getManyAndCount();
+
+    console.log(queryBuilder.getSql());
 
     return result;
 

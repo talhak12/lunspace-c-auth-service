@@ -50,4 +50,6 @@ export type AuthCookie = {
 export interface UserQueryParams {
   currentPage: number;
   perPage: number;
+  q: string;
+  role: string;
 }

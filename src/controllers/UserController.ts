@@ -27,7 +27,10 @@ export class UserController {
 
   async get(req: Request, res: Response) {
     const validatedQuery = matchedData(req, { onlyValidData: true });
-
+    if (validatedQuery.currentpage === 1) {
+      validatedQuery.currentPage = 1;
+      validatedQuery.perPage = 1;
+    }
     console.log('validatedQuery', validatedQuery);
 
     const [users, count] = await this.userService.find(validatedQuery);

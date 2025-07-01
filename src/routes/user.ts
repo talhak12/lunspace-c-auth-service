@@ -45,4 +45,8 @@ router.get('/', listUserValidator, (req, res, next) => {
   userController.get(req, res);
 });
 
+router.patch('/:id', (req, res, next) => {
+  userController.update(req, res, next);
+});
+
 export default router;

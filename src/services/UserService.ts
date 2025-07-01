@@ -84,6 +84,7 @@ export class UserService {
     }
 
     const result = await queryBuilder
+      .leftJoinAndSelect('user.tenant', 'tenant')
       .skip((validatedQuery.currentPage - 1) * validatedQuery.perPage)
       .take(validatedQuery.perPage)
       .orderBy('user.id', 'DESC')
@@ -101,5 +102,22 @@ export class UserService {
         role: true,
       },
     });*/
+  }
+
+  async update(id: number, { firstName, lastName, email }: userData) {
+    try {
+      return await this.userRepository.update(id, {
+        firstName,
+        lastName,
+        email,
+      });
+    } catch (err) {
+      console.log(err);
+      const error = createHttpError(
+        500,
+        'failed to update the data in the database'
+      );
+      throw error;
+    }
   }
 }

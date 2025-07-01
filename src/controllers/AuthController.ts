@@ -111,6 +111,8 @@ export class AuthController {
         return;
       }
 
+      console.log(user);
+
       const passwordMatch = await this.credentialService.comparePassword(
         password,
         user.password
@@ -124,7 +126,7 @@ export class AuthController {
 
       const payload: JwtPayload = {
         sub: String(user.id),
-        role: 'customer',
+        role: String(user.role),
       };
 
       const accessToken = this.tokenService.generateAccessToken(payload);

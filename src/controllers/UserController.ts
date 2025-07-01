@@ -42,4 +42,23 @@ export class UserController {
       total: count,
     });
   }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+    const { firstName, lastName, email, password, role } = req.body;
+
+    try {
+      const user = await this.userService.update(parseInt(id), {
+        firstName,
+        lastName,
+        email,
+        password,
+        role,
+      });
+
+      res.status(200).json({ id: user });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
